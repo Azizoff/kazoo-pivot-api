@@ -1,0 +1,18 @@
+{
+    "name": "ildar/php-features",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ildar",
+            "email": "azizovreg@gmai.com"
+        }
+    ],
+    "require": {
+        "2600hz/kazoo-php-sdk": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "AIR" : "src/"
+        }
+    }
+}
