@@ -1,5 +1,5 @@
 {
-    "name": "ildar/php-features",
+    "name": "air/kazoo-pivot-action",
     "license": "MIT",
     "authors": [
         {
@@ -7,8 +7,6 @@
             "email": "azizovreg@gmai.com"
         }
     ],
-    "require": {
-    },
     "autoload": {
         "psr-0": {
             "AIR" : "src/"
