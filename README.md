@@ -23,3 +23,39 @@ header('content-type: application/json');
 
 echo $tree;
 ```
+
+Result
+```json
+{
+  "module": "play",
+  "data": {
+    "id": "sound-resource-id-or-http-url"
+  },
+  "children": {
+    "_": {
+      "module": "sleep",
+      "data": {
+        "unit": "s",
+        "duration": 15
+      },
+      "children": {
+        "_": {
+          "module": "device",
+          "data": {
+            "id": "device-id",
+            "timeout": 15
+          },
+          "children": {
+            "_": {
+              "module": "play",
+              "data": {
+                "id": "another-sound-resource-id-or-http-url"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
