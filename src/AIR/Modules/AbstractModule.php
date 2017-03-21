@@ -12,22 +12,22 @@ use AIR\Exceptions\WrongMethodException;
  * @package AIR\Modules
  * @link https://github.com/2600hz/kazoo/tree/master/applications/callflow/doc/ref
  *
- * @method CollectDTMF collectDtmf
- * @method Device device
- * @method Menu menu
- * @method Pivot pivot
- * @method Play play
- * @method Resources resources
- * @method Response response
- * @method SimpleModule conference
- * @method SimpleModule language
- * @method SimpleModule simpleModule(string $name)
- * @method SimpleModule tts
- * @method SimpleMultiChildModule simpleMultiChildModule(string $name)
- * @method Sleep sleep
- * @method User user
- * @method Voicemail voicemail
- * @method Webhook webhook
+ * @method CollectDTMF collectDtmf(mixed $data = null)
+ * @method Device device(mixed $data = null)
+ * @method Menu menu(mixed $data = null)
+ * @method Pivot pivot(mixed $data = null)
+ * @method Play play(mixed $data = null)
+ * @method Resources resources(mixed $data = null)
+ * @method Response response(mixed $data = null)
+ * @method SimpleModule conference(mixed $data = null)
+ * @method SimpleModule language(mixed $data = null)
+ * @method SimpleModule simpleModule(string $name, mixed $data = null)
+ * @method SimpleModule tts(mixed $data = null)
+ * @method SimpleMultiChildModule simpleMultiChildModule(string $name, mixed $data = null)
+ * @method Sleep sleep(mixed $data = null)
+ * @method User user(mixed $data = null)
+ * @method Voicemail voicemail(mixed $data = null)
+ * @method Webhook webhook(mixed $data = null)
  */
 abstract class AbstractModule implements \JsonSerializable
 {
@@ -214,19 +214,25 @@ abstract class AbstractModule implements \JsonSerializable
             $parents = class_parents($modulePath);
             if (array_key_exists(AbstractModule::class, $parents)) {
                 if ('SimpleModule' === $moduleName) {
-                    return $this->then(new $modulePath($arguments[0]));
+                    $instanceName = array_shift($arguments);
+                    $module = $this->then(new SimpleModule($instanceName));
+                } elseif ('SimpleMultiChildModule' === $moduleName) {
+                    $instanceName = array_shift($arguments);
+                    $module = $this->then(new SimpleMultiChildModule($instanceName));
+                } else {
+                    $module = $this->then(new $modulePath);
                 }
-                if ('SimpleMultiChildModule' === $moduleName) {
-                    return $this->then(new $modulePath($arguments[0]));
-                }
-
-                return $this->then(new $modulePath);
             } else {
                 throw new WrongMethodException(sprintf('Class must be instance of (%s)', AbstractModule::class));
             }
         } else {
-            return $this->then(new SimpleModule(strtolower($name)));
+            $module = $this->then(new SimpleModule(strtolower($name)));
         }
+        if (count($arguments)) {
+            call_user_func_array([$module, 'data'], $arguments);
+        }
+
+        return $module;
     }
 
     /**
