@@ -2,6 +2,11 @@
 
 namespace AIR\Modules\data;
 
+/**
+ * Class PivotData
+ *
+ * @package AIR\Modules\data
+ */
 class PivotData extends SimpleData
 {
     const DATA_KEY_VOICE_URL = 'voice_url';
