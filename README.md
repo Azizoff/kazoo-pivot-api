@@ -1,7 +1,7 @@
 Readme
 ======
 
-Json generation for kazoo pivot API
+Json generation for [kazoo](https://github.com/2600hz/kazoo/) pivot API
 
 How to use
 ----------
