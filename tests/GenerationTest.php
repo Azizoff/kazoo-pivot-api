@@ -67,6 +67,15 @@ class GenerationTest extends TestCase
         static::assertEquals((string)$builderEntityA, (string)$builderEntityB);
     }
 
+    public function testEqualsDataMethodAndDataParameter()
+    {
+        $builder = new ModuleBuilder();
+        $builderEntityA = $builder->sleep()->data(['unit' => 's', 'duration' => 5]);
+        $builderEntityB = $builder->sleep(['unit' => 's', 'duration' => 5]);
+        static::assertEquals((string)$builderEntityA, (string)$builderEntityB);
+        static::assertEquals('{"module":"sleep","data":{"unit":"s","duration":5}}', (string)$builderEntityB);
+    }
+
     public function testEqualsDataTypeArrayAndCallbackDataHelper()
     {
         $builder = new ModuleBuilder();
