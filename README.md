@@ -24,7 +24,23 @@ header('content-type: application/json');
 echo $tree;
 ```
 
-Result
+or
+
+```php
+$tree =
+    (new \AIR\ModuleBuilder())
+        ->play(['id' => 'sound-resource-id-or-http-url'])
+        ->sleep(new \AIR\Modules\data\SleepData(15))
+        ->device(['id' => 'device-id', 'timeout' => 15])
+        ->play(['id' => 'another-sound-resource-id-or-http-url'])
+        ->end();
+        
+header('content-type: application/json');
+
+echo $tree;
+```
+
+Result:
 ```json
 {
   "module": "play",
