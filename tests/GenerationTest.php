@@ -2,12 +2,7 @@
 
 namespace tests;
 
-use AIR\ModuleBuilder;
-use AIR\Modules\data\PivotData;
-use AIR\Modules\data\SleepData;
-use AIR\Modules\Pivot;
 use AIR\Modules\SimpleModule;
-use AIR\Modules\Sleep;
 use PHPUnit\Framework\TestCase;
 
 class GenerationTest extends TestCase
