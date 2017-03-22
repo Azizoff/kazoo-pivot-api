@@ -117,6 +117,7 @@ class SimpleModule
     public function data($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -130,6 +131,7 @@ class SimpleModule
         $child = new SimpleModule($name);
         $child->setParent($this);
         $this->children = $child;
+
         return $child;
     }
 
@@ -139,6 +141,7 @@ class SimpleModule
         while ($entity->getParent() !== null) {
             $entity = $entity->getParent();
         }
+
         return $entity;
     }
 
@@ -150,6 +153,7 @@ class SimpleModule
     public function setParent(SimpleModule $parent)
     {
         $this->parent = $parent;
+
         return $this;
     }
 
