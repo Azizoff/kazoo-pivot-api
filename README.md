@@ -7,37 +7,19 @@ How to use
 ----------
 
 ```php
-$tree =
-    (new \AIR\ModuleBuilder())
-        ->play()
-        ->data(['id' => 'sound-resource-id-or-http-url'])
-        ->sleep()
-        ->data(new \AIR\Modules\data\SleepData(15))
-        ->device()
-        ->data(['id' => 'device-id', 'timeout' => 15])
-        ->play()
-        ->data(['id' => 'another-sound-resource-id-or-http-url'])
-        ->end();
+$play = new SimpleModule('play');
+$play
+    ->data(array('id' => 'sound-resource-id-or-http-url'))
+    ->then('sleep')
+    ->data(array('unit' => 's', 'duration' => 15))
+    ->then('device')
+    ->data(array('id' => 'device-id', 'timeout' => 15))
+    ->then('play')
+    ->data(array('id' => 'another-sound-resource-id-or-http-url'))
+;
         
 header('content-type: application/json');
-
-echo $tree;
-```
-
-or
-
-```php
-$tree =
-    (new \AIR\ModuleBuilder())
-        ->play(['id' => 'sound-resource-id-or-http-url'])
-        ->sleep(new \AIR\Modules\data\SleepData(15))
-        ->device(['id' => 'device-id', 'timeout' => 15])
-        ->play(['id' => 'another-sound-resource-id-or-http-url'])
-        ->end();
-        
-header('content-type: application/json');
-
-echo $tree;
+echo $play->render();
 ```
 
 Result:
