@@ -58,70 +58,6 @@ class SimpleModule implements Renderable
     }
 
     /**
-     * @return SimpleModule|SimpleModule[]|array
-     */
-    private function childrenForRender()
-    {
-        $result = array();
-        $children = $this->getChildren();
-        if (is_array($children)) {
-            foreach ((array)$children as $key => $value) {
-                $result[$key] = $value->serializableData();
-            }
-        } elseif ($children instanceof SimpleModule) {
-            $result['_'] = $children->serializableData();
-        } elseif ($children !== null) {
-            $result = $children;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return SimpleModule|SimpleModule[]
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function serializableData()
-    {
-        $result = array();
-        $result['module'] = $this->getName();
-
-        if (null !== $this->getData()) {
-            $result['data'] = $this->getData();
-        }
-
-        if (null !== $this->getChildren()) {
-            $result['children'] = $this->childrenForRender();
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
      * @param array|null $data
      *
      * @return $this
@@ -155,5 +91,68 @@ class SimpleModule implements Renderable
         }
 
         return $entity;
+    }
+
+    /**
+     * @return SimpleModule|SimpleModule[]|array
+     */
+    private function childrenForRender()
+    {
+        $result = array();
+        $children = $this->getChildren();
+        if (is_array($children)) {
+            foreach ((array)$children as $key => $value) {
+                $result[$key] = $value->serializableData();
+            }
+        } elseif ($children instanceof SimpleModule) {
+            $result['_'] = $children->serializableData();
+        } elseif ($children !== null) {
+            $result = $children;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return SimpleModule|SimpleModule[]
+     */
+    private function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @return array
+     */
+    public function serializableData()
+    {
+        $result = array();
+        $result['module'] = $this->getName();
+
+        if (null !== $this->getData()) {
+            $result['data'] = $this->getData();
+        }
+
+        if (null !== $this->getChildren()) {
+            $result['children'] = $this->childrenForRender();
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    private function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getData()
+    {
+        return $this->data;
     }
 }
