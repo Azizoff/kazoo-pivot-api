@@ -76,7 +76,7 @@ class SimpleModule implements Renderable
      */
     public function then($name)
     {
-        $child = new SimpleModule($name);
+        $child = new SimpleModule($name, $this->renderer);
         $child->parent = $this;
         $this->children = $child;
 
