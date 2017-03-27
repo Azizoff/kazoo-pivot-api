@@ -71,15 +71,16 @@ class SimpleModule implements Renderable
 
     /**
      * @param $name
+     * @param array|null $data
      *
      * @return SimpleModule
      */
-    public function then($name)
+    public function then($name, $data = null)
     {
         $child = new SimpleModule($name, $this->renderer);
+        $child->data($data);
         $child->parent = $this;
         $this->children = $child;
-
         return $child;
     }
 

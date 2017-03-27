@@ -49,5 +49,16 @@ class GenerationTest extends TestCase
         static::assertEquals('{"module":"play","data":{"id":"sound-resource-id-or-http-url"},"children":{"_":{"module":"sleep","data":{"unit":"s","duration":15},"children":{"_":{"module":"device","data":{"id":"device-id","timeout":15},"children":{"_":{"module":"play","data":{"id":"another-sound-resource-id-or-http-url"}}}}}}}}', $play->render());
     }
 
+    public function testSimpleExample()
+    {
+        $play = new SimpleModule('play');
+        $play
+            ->data(array('id' => 'sound-resource-id-or-http-url'))
+            ->then('sleep', array('unit' => 's', 'duration' => 15))
+            ->then('device', array('id' => 'device-id', 'timeout' => 15))
+            ->then('play', array('id' => 'another-sound-resource-id-or-http-url'));
+        static::assertEquals('{"module":"play","data":{"id":"sound-resource-id-or-http-url"},"children":{"_":{"module":"sleep","data":{"unit":"s","duration":15},"children":{"_":{"module":"device","data":{"id":"device-id","timeout":15},"children":{"_":{"module":"play","data":{"id":"another-sound-resource-id-or-http-url"}}}}}}}}', $play->render());
+    }
+
 
 }
