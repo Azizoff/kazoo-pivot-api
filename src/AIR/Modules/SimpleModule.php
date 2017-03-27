@@ -20,7 +20,6 @@ class SimpleModule implements Renderable
      * @var SimpleModule|SimpleModule[]
      */
     private $children;
-
     /**
      * @var SimpleModule
      */
@@ -84,6 +83,9 @@ class SimpleModule implements Renderable
         return $child;
     }
 
+    /**
+     * @return SimpleModule
+     */
     public function end()
     {
         $entity = $this;
@@ -95,7 +97,7 @@ class SimpleModule implements Renderable
     }
 
     /**
-     * @return SimpleModule|SimpleModule[]|array
+     * @return SimpleModule|SimpleModule[]
      */
     private function childrenForRender()
     {
