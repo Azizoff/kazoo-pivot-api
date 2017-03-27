@@ -2,12 +2,15 @@
 
 namespace AIR\Modules;
 
+use AIR\Renderers\JsonRenderer;
+use AIR\Renderers\RendererInterface;
+
 /**
  * Class SimpleModule
  *
  * @package AIR\Modules
  */
-class SimpleModule
+class SimpleModule implements Renderable
 {
     /**
      * @var string
@@ -26,15 +29,24 @@ class SimpleModule
      * @var array|null
      */
     private $data;
+    /**
+     * @var RendererInterface
+     */
+    private $renderer;
 
     /**
      * SimpleModule constructor.
      *
      * @param $name
+     * @param RendererInterface $renderer
      */
-    public function __construct($name)
+    public function __construct($name, RendererInterface $renderer = null)
     {
         $this->name = $name;
+        $this->renderer = $renderer;
+        if (null === $renderer) {
+            $this->renderer = new JsonRenderer();
+        }
     }
 
     /**
@@ -42,7 +54,7 @@ class SimpleModule
      */
     public function render()
     {
-        return \json_encode($this->jsonSerializable());
+        return $this->renderer->render($this);
     }
 
     /**
@@ -54,10 +66,10 @@ class SimpleModule
         $children = $this->getChildren();
         if (is_array($children)) {
             foreach ((array)$children as $key => $value) {
-                $result[$key] = $value->jsonSerializable();
+                $result[$key] = $value->serializableData();
             }
         } elseif ($children instanceof SimpleModule) {
-            $result['_'] = $children->jsonSerializable();
+            $result['_'] = $children->serializableData();
         } elseif ($children !== null) {
             $result = $children;
         }
@@ -77,7 +89,7 @@ class SimpleModule
     /**
      * @return array
      */
-    public function jsonSerializable()
+    public function serializableData()
     {
         $result = array();
         $result['module'] = $this->getName();
@@ -129,7 +141,7 @@ class SimpleModule
     public function then($name)
     {
         $child = new SimpleModule($name);
-        $child->setParent($this);
+        $child->parent = $this;
         $this->children = $child;
 
         return $child;
@@ -138,30 +150,10 @@ class SimpleModule
     public function end()
     {
         $entity = $this;
-        while ($entity->getParent() !== null) {
-            $entity = $entity->getParent();
+        while ($entity->parent !== null) {
+            $entity = $entity->parent;
         }
 
         return $entity;
-    }
-
-    /**
-     * @param SimpleModule $parent
-     *
-     * @return $this
-     */
-    public function setParent(SimpleModule $parent)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return SimpleModule
-     */
-    public function getParent()
-    {
-        return $this->parent;
     }
 }
