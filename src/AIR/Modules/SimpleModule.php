@@ -57,6 +57,17 @@ class SimpleModule implements Renderable
     }
 
     /**
+     * @param $name
+     * @param array|null $data
+     *
+     * @return SimpleModule
+     */
+    public function then($name, $data = null)
+    {
+        return $this->setChild('_', $name, $data, true);
+    }
+
+    /**
      * @param array|null $data
      *
      * @return $this
@@ -66,21 +77,6 @@ class SimpleModule implements Renderable
         $this->data = $data;
 
         return $this;
-    }
-
-    /**
-     * @param $name
-     * @param array|null $data
-     *
-     * @return SimpleModule
-     */
-    public function then($name, $data = null)
-    {
-        $child = new SimpleModule($name, $this->renderer);
-        $child->data($data);
-        $child->parent = $this;
-        $this->children = $child;
-        return $child;
     }
 
     /**
@@ -104,11 +100,13 @@ class SimpleModule implements Renderable
         $result = array();
         $children = $this->getChildren();
         if (is_array($children)) {
-            foreach ((array)$children as $key => $value) {
-                $result[$key] = $value->serializableData();
+            foreach ($children as $key => $value) {
+                if ($value instanceof Renderable) {
+                    $result[$key] = $value->serializableData();
+                } else {
+                    $result[$key] = $value;
+                }
             }
-        } elseif ($children instanceof SimpleModule) {
-            $result['_'] = $children->serializableData();
         } elseif ($children !== null) {
             $result = $children;
         }
@@ -117,11 +115,43 @@ class SimpleModule implements Renderable
     }
 
     /**
-     * @return SimpleModule|SimpleModule[]
+     * @return SimpleModule[]
      */
-    private function getChildren()
+    public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * @param SimpleModule[] $children
+     *
+     * @return $this
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param string $name
+     *
+     * @param array $data
+     * @param bool $then
+     *
+     * @return SimpleModule
+     */
+    public function setChild($key, $name, $data = null, $then = false)
+    {
+        $child = new SimpleModule($name);
+        $child->parent = $this;
+        $child->data($data);
+        $this->children[$key] = $child;
+        if ($then) {
+            return $child;
+        }
+        return $this;
     }
 
     /**
