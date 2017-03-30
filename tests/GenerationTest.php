@@ -61,4 +61,22 @@ class GenerationTest extends TestCase
     }
 
 
+    public function testBaseTypesAsData()
+    {
+        $play = new SimpleModule('module');
+        $play
+            ->data(true)
+            ->then('module', false)
+            ->then('module', 'string')
+            ->then('module', 15)
+            ->then('module', 42.24)
+            ->then('module', 0.0)
+            ->then('module', array('foo' => 'bar'))
+            ->then('module', (object)array('foo' => 'bar'));
+        static::assertEquals('{"module":"module","data":true,"children":{"_":{"module":"module","data":false,"children":{"_":{"module":"module","data":"string","children":{"_":{"module":"module","data":15,"children":{"_":{"module":"module","data":42.24,"children":{"_":{"module":"module","data":0,"children":{"_":{"module":"module","data":{"foo":"bar"},"children":{"_":{"module":"module","data":{"foo":"bar"}}}}}}}}}}}}}}}}', $play->render());
+    }
+
+
+
+
 }

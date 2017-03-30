@@ -25,7 +25,7 @@ class SimpleModule implements Renderable
      */
     private $parent;
     /**
-     * @var array|null
+     * @var mixed
      */
     private $data;
     /**
@@ -58,7 +58,7 @@ class SimpleModule implements Renderable
 
     /**
      * @param string $name
-     * @param array|null $data
+     * @param mixed $data
      *
      * @return SimpleModule
      */
@@ -90,7 +90,7 @@ class SimpleModule implements Renderable
     }
 
     /**
-     * @param array|null $data
+     * @param mixed $data
      *
      * @return $this
      */
@@ -142,7 +142,7 @@ class SimpleModule implements Renderable
     }
 
     /**
-     * @return array|null
+     * @return mixed
      */
     private function getData()
     {
