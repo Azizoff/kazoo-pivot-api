@@ -17,7 +17,7 @@ class SimpleModule implements Renderable
      */
     private $name;
     /**
-     * @var SimpleModule|SimpleModule[]
+     * @var SimpleModule[]
      */
     private $children;
     /**
@@ -36,7 +36,7 @@ class SimpleModule implements Renderable
     /**
      * SimpleModule constructor.
      *
-     * @param $name
+     * @param string $name
      * @param RendererInterface $renderer
      */
     public function __construct($name, RendererInterface $renderer = null)
@@ -57,7 +57,7 @@ class SimpleModule implements Renderable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param array|null $data
      *
      * @return SimpleModule
@@ -65,6 +65,28 @@ class SimpleModule implements Renderable
     public function then($name, $data = null)
     {
         return $this->setChild('_', $name, $data, true);
+    }
+
+    /**
+     * @param string $key
+     * @param string $name
+     *
+     * @param array $data
+     * @param bool $then
+     *
+     * @return SimpleModule
+     */
+    public function setChild($key, $name, $data = null, $then = false)
+    {
+        $child = new SimpleModule($name);
+        $child->parent = $this;
+        $child->data($data);
+        $this->children[$key] = $child;
+        if ($then) {
+            return $child;
+        }
+
+        return $this;
     }
 
     /**
@@ -90,68 +112,6 @@ class SimpleModule implements Renderable
         }
 
         return $entity;
-    }
-
-    /**
-     * @return SimpleModule|SimpleModule[]
-     */
-    private function childrenForRender()
-    {
-        $result = array();
-        $children = $this->getChildren();
-        if (is_array($children)) {
-            foreach ($children as $key => $value) {
-                if ($value instanceof Renderable) {
-                    $result[$key] = $value->serializableData();
-                } else {
-                    $result[$key] = $value;
-                }
-            }
-        } elseif ($children !== null) {
-            $result = $children;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return SimpleModule[]
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
-     * @param SimpleModule[] $children
-     *
-     * @return $this
-     */
-    public function setChildren($children)
-    {
-        $this->children = $children;
-        return $this;
-    }
-
-    /**
-     * @param string $key
-     * @param string $name
-     *
-     * @param array $data
-     * @param bool $then
-     *
-     * @return SimpleModule
-     */
-    public function setChild($key, $name, $data = null, $then = false)
-    {
-        $child = new SimpleModule($name);
-        $child->parent = $this;
-        $child->data($data);
-        $this->children[$key] = $child;
-        if ($then) {
-            return $child;
-        }
-        return $this;
     }
 
     /**
@@ -187,5 +147,47 @@ class SimpleModule implements Renderable
     private function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * @return SimpleModule[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param SimpleModule[] $children
+     *
+     * @return $this
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    private function childrenForRender()
+    {
+        $result = array();
+        $children = $this->getChildren();
+        if (is_array($children)) {
+            foreach ($children as $key => $value) {
+                if ($value instanceof Renderable) {
+                    $result[$key] = $value->serializableData();
+                } else {
+                    $result[$key] = $value;
+                }
+            }
+        } elseif ($children !== null) {
+            $result = $children;
+        }
+
+        return $result;
     }
 }
