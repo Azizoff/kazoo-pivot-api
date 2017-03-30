@@ -7,7 +7,8 @@ How to use
 ----------
 
 ```php
-$module = new SimpleModule('play');
+<?php
+$module = new \AIR\Modules\SimpleModule('play');
 $module
     ->data(array('id' => 'sound-resource-id-or-http-url'))
     ->then('sleep')
@@ -23,7 +24,8 @@ echo $module->render();
 ```
 or
 ```php
-$module = new SimpleModule('play');
+<?php
+$module = new \AIR\Modules\SimpleModule('play');
 $module
     ->data(array('id' => 'sound-resource-id-or-http-url'))
     ->then('sleep', array('unit' => 's', 'duration' => 15))
@@ -32,7 +34,7 @@ $module
 ;
         
 header('content-type: application/json');
-echo $play->render();
+echo $module->render();
 ```
 
 Result:
