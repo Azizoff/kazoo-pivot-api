@@ -2,6 +2,7 @@
 
 namespace AIR\Modules;
 
+use AIR\Exceptions\ModuleException;
 use AIR\Renderers\JsonRenderer;
 use AIR\Renderers\RendererInterface;
 
@@ -38,10 +39,12 @@ class SimpleModule implements Renderable
      *
      * @param string $name
      * @param RendererInterface $renderer
+     *
+     * @throws \AIR\Exceptions\ModuleException
      */
     public function __construct($name, RendererInterface $renderer = null)
     {
-        $this->name = $name;
+        $this->setName($name);
         $this->renderer = $renderer;
         if (null === $renderer) {
             $this->renderer = new JsonRenderer();
@@ -61,6 +64,7 @@ class SimpleModule implements Renderable
      * @param mixed $data
      *
      * @return SimpleModule
+     * @throws \AIR\Exceptions\ModuleException
      */
     public function then($name, $data = null)
     {
@@ -75,6 +79,7 @@ class SimpleModule implements Renderable
      * @param bool $then
      *
      * @return SimpleModule
+     * @throws \AIR\Exceptions\ModuleException
      */
     public function setChild($key, $name, $data = null, $then = false)
     {
@@ -189,5 +194,22 @@ class SimpleModule implements Renderable
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws \AIR\Exceptions\ModuleException
+     */
+    private function setName($name)
+    {
+        if (!is_scalar($name)) {
+            throw new ModuleException(sprintf('Module name must have scalar type, %s given',  gettype($name)));
+        }
+
+        if (empty($name)) {
+            throw new ModuleException(sprintf('Module name required'));
+        }
+        $this->name = $name;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace tests;
 
+use AIR\Exceptions\ModuleException;
 use AIR\Modules\SimpleModule;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +50,7 @@ class GenerationTest extends TestCase
         static::assertEquals('{"module":"play","data":{"id":"sound-resource-id-or-http-url"},"children":{"_":{"module":"sleep","data":{"unit":"s","duration":15},"children":{"_":{"module":"device","data":{"id":"device-id","timeout":15},"children":{"_":{"module":"play","data":{"id":"another-sound-resource-id-or-http-url"}}}}}}}}', $play->render());
     }
 
-    public function testSimpleExample()
+    public function testExampleV2()
     {
         $play = new SimpleModule('play');
         $play
@@ -74,6 +75,38 @@ class GenerationTest extends TestCase
             ->then('module', array('foo' => 'bar'))
             ->then('module', (object)array('foo' => 'bar'));
         static::assertEquals('{"module":"module","data":true,"children":{"_":{"module":"module","data":false,"children":{"_":{"module":"module","data":"string","children":{"_":{"module":"module","data":15,"children":{"_":{"module":"module","data":42.24,"children":{"_":{"module":"module","data":0,"children":{"_":{"module":"module","data":{"foo":"bar"},"children":{"_":{"module":"module","data":{"foo":"bar"}}}}}}}}}}}}}}}}', $play->render());
+    }
+
+    /**
+     * @expectedException \AIR\Exceptions\ModuleException
+     */
+    public function testNullModuleName()
+    {
+        $play = new SimpleModule(null);
+    }
+
+    /**
+     * @expectedException \AIR\Exceptions\ModuleException
+     */
+    public function testBadModuleNameType()
+    {
+        $play = new SimpleModule(array());
+    }
+    /**
+     * @expectedException \AIR\Exceptions\ModuleException
+     */
+    public function testEmptyModuleNameType()
+    {
+        $play = new SimpleModule('');
+    }
+
+    /**
+     * @expectedException \AIR\Exceptions\ModuleException
+     */
+    public function testEmptyModuleNameTypeInThenConstruction()
+    {
+        $play = new SimpleModule('module');
+        $play->then('');
     }
 
 
