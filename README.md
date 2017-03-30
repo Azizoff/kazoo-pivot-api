@@ -7,7 +7,6 @@ How to use
 ----------
 
 ```php
-<?php
 $module = new \AIR\Modules\SimpleModule('play');
 $module
     ->data(array('id' => 'sound-resource-id-or-http-url'))
@@ -24,7 +23,6 @@ echo $module->render();
 ```
 or
 ```php
-<?php
 $module = new \AIR\Modules\SimpleModule('play');
 $module
     ->data(array('id' => 'sound-resource-id-or-http-url'))
